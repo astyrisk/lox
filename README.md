@@ -1,1 +1,1 @@
-a very dumpy implementation of the lox language
+a very dump implementation of the lox language
