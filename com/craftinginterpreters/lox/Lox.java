@@ -41,10 +41,18 @@ public class Lox {
     }
   }
 
-  //TODO Token is not defined yet
+  //DONE Token is not defined yet
   private static void run(String source) { 
     Scanner scanner = new Scanner(source);
     List<Token> tokens = scanner.scanTokens();
+
+    Parser parser = new Parser(tokens);
+    Expr expression = parser.parse();
+
+    if (hadError) return;
+
+    System.out.println(new AstPrinter().print(expression));
+
 
     for (Token token : tokens) {
       System.out.println(token);
@@ -59,6 +67,15 @@ public class Lox {
     System.err.println("[line " + line + "] Error" + where + ": " + message);
     hadError = true;
   }
+
+  static void error(Token token, String message) {
+      if (token.type == TokenType.EOF) {
+          report(token.line, " at line", message);
+      } else {
+          report(token.line, " at '" + token.lexeme + "'", message);
+      }
+  }
+
 
 }
 
