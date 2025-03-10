@@ -1,4 +1,5 @@
 package com.craftinginterpreters.lox;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GrayFilter;
@@ -120,7 +121,7 @@ class Parser {
             return new Expr.Grouping(expr);
         }
 
-        throw error(peek(), "Expect expression.");
+        throw error(peek(), "Expect expression. " + peek());
     }
 
     private Token consume(TokenType type, String message) {
@@ -155,11 +156,31 @@ class Parser {
         }
     }
 
-    Expr parse() {
-        try {
-            return expression();
-        } catch (ParseError error) {
-            return null;
+    List<Stmt> parse() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!isAtEnd()) {
+            statements.add(statement());
         }
+        return statements;
+    }
+
+    private Stmt statement() {
+        if (match(PRINT)) {
+            return printStatement();
+        } else {
+            return expressionStatement();
+        }         
+    }
+
+    private Stmt printStatement() {
+        Expr val = expression();
+        consume(SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Print(val);
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Expression(expr);
     }
 }

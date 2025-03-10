@@ -148,9 +148,6 @@ class Scanner {
     TokenType type = keywords.get(text);
     if (type == null) type = IDENTIFIER;
     addToken(type);
-
-
-    addToken(IDENTIFIER);
   }
 
   private boolean isDigit(char c) { 
@@ -171,6 +168,9 @@ class Scanner {
   private boolean match(char expected) { 
     if (isAtEnd()) return false;
     if (source.charAt(current) != expected) return false;
+
+
+    current++;
     return true;
   }
 
