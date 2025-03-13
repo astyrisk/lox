@@ -1,3 +1,4 @@
+
 package com.craftinginterpreters.lox;
 
 import java.io.BufferedReader;
@@ -86,4 +87,3 @@ public class Lox {
     hadRuntimeError = true;
   }
 }
-
